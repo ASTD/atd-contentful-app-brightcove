@@ -1,119 +1,122 @@
-import React, { useEffect, useState } from 'react';
-import { css } from 'emotion';
-import { Button, EntityList, EntityListItem, Icon, ModalContent, Spinner } from '@contentful/forma-36-react-components';
-import { DialogExtensionSDK } from '@contentful/app-sdk';
-import { BrightcoveFolder, BrightcoveVideo } from '../types';
-import { AppInstallationParameters } from './ConfigScreen';
-import { EntityListSkeleton } from './ui';
+import React, { useEffect, useState } from "react";
+import { DialogExtensionSDK } from "@contentful/app-sdk";
+import {
+  BrightcoveFolder,
+  BrightcoveVideo,
+  FolderSpecificBrightcoveVideos,
+} from "../types";
+import { AppInstallationParameters } from "./ConfigScreen";
+import Folders from "./DialogComponents/Folders";
+import FolderSpecificVideos from "./DialogComponents/FolderSpecificVideos";
+import Search from "./DialogComponents/Search";
 
 interface DialogProps {
   sdk: DialogExtensionSDK;
 }
 
 const Dialog = ({ sdk }: DialogProps) => {
-  const { proxyUrl } = sdk.parameters.installation as unknown as AppInstallationParameters
+  const { proxyUrl } = (sdk.parameters
+    .installation as unknown) as AppInstallationParameters;
 
-  const [ videos, setVideos ] = useState<BrightcoveVideo[]>([])
-  const [ folders, setFolders ] = useState<BrightcoveFolder[]>([])
-  const [ folder, setFolder ] = useState<BrightcoveFolder | null>(null)
+  const ref = React.createRef<HTMLDivElement>();
+  const [currentPage, setCurrentPage] = useState(0);
+  const [close, setClose] = useState<boolean>(false);
+  const [sortDirection, setSortDirection] = useState<string>("latest");
+  const [videos, setVideos] = useState<BrightcoveVideo[]>([]);
+  const [videoDetail, setVideoDetail] = useState<string>("");
+  const [folders, setFolders] = useState<BrightcoveFolder[]>([]);
+  const [folder, setFolder] = useState<BrightcoveFolder | null>(null);
+  const [selectedSort, setSelectedSort] = useState<string>("created_at");
+  const [selectedSortAscDesc, setSelectedSortAscDesc] = useState<string>("-");
+  const [
+    videoCount,
+    setVideoCount,
+  ] = useState<FolderSpecificBrightcoveVideos | null>(null);
 
   useEffect(() => {
-    sdk.window.startAutoResizer()
-
+    sdk.window.startAutoResizer();
     return () => {
-      sdk.window.stopAutoResizer()
-    }
-
+      sdk.window.stopAutoResizer();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  
+  }, []);
+
   useEffect(() => {
     (async () => {
-      const folders: BrightcoveFolder[] = await fetch(`${ proxyUrl }/folders`)
-        .then(response => response.json())
-
-      setFolders(folders)
-    })()
-
-  }, [proxyUrl])
+      const folders: BrightcoveFolder[] = await fetch(`${proxyUrl}/folders`)
+        .then((response) => response.json())
+        .catch((err) => console.log(err));
+      setFolders(folders);
+    })();
+  }, [proxyUrl]);
 
   useEffect(() => {
     (async () => {
       if (folder) {
-        const videos: BrightcoveVideo[] = await fetch(`${ proxyUrl }/folders/${ folder.id }/videos`)
-          .then(response => response.json())
+        const videoCount: FolderSpecificBrightcoveVideos = await fetch(
+          `${proxyUrl}/folders/${folder.id}`
+        )
+          .then((response) => response.json())
+          .catch((err) => console.log(err));
+        setVideoCount(videoCount);
 
+        const videos: BrightcoveVideo[] = await fetch(
+          `${proxyUrl}/folders/${
+            folder.id
+          }/videos?sort=${selectedSortAscDesc}${selectedSort}&limit=10&offset=${
+            currentPage * 10
+          }`
+        )
+          .then((response) => response.json())
+          .catch((err) => console.log(err));
         setVideos(videos);
       } else {
         setVideos([]);
       }
-    })()
-  }, [proxyUrl, folder])
+    })();
 
-  if (folders.length === 0) {
-    return (
-      <ModalContent data-testid="modal-spinner">
-        <Spinner className={css`margin: 4px auto; display: block;` } />
-      </ModalContent>
-    )
-  }
-
-  if (folder === null) {
-    return (
-      <ModalContent data-testid="modal-folders">
-        <div className={css`margin-bottom: 1rem;`}>
-          <Icon icon="Folder" className={css`vertical-align: text-bottom;`} /> Select a Folder:
-        </div>
-        <EntityList data-testid="folder-list">
-          {
-            folders.map(folder => (
-              <EntityListItem
-                data-testid={`${folder.id}-${folder.name}`}
-                key={folder.id}
-                className={css`cursor: pointer;`}
-                title={folder.name}
-                contentType={folder.id}
-                withThumbnail={false}
-                onClick={() => setFolder(folder)}
-              />
-            ))
-          }
-        </EntityList>
-      </ModalContent>
-    )
-  }
+    if (ref.current !== null) {
+      ref.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [
+    proxyUrl,
+    folder,
+    currentPage,
+    selectedSort,
+    selectedSortAscDesc,
+    sortDirection,
+  ]);
 
   return (
-    <ModalContent data-testid="modal-videos">
-      <Button data-testid="back-to-folders" className={css`margin-bottom: 20px;`} buttonType="muted" onClick={() => setFolder(null)}>
-        Back
-      </Button>
-
-      {
-        videos.length === 0 && <EntityListSkeleton num={folder.video_count} />
-      }
-
-      {
-        videos.length > 0 && (
-          <EntityList>
-            {
-              videos.map(video => (
-                <EntityListItem
-                  data-testid={`${video.id}-${video.name}`}
-                  key={video.id}
-                  className={css`cursor: pointer;`}
-                  title={video.name}
-                  description={video.description}
-                  thumbnailUrl={video.images.thumbnail?.src}
-                  onClick={() => sdk.close(video)}
-                />
-              ))
-            }
-          </EntityList>
-        )
-      }
-    </ModalContent>
-  )
+    <div style={{ minWidth: "900px" }}>
+      <p>
+        <Search />
+      </p>
+      {folder === null ? (
+        <Folders folders={folders} setFolder={setFolder} />
+      ) : (
+        <FolderSpecificVideos
+          currentPage={currentPage}
+          videoDetail={videoDetail}
+          videoCount={videoCount}
+          folder={folder}
+          videos={videos}
+          close={close}
+          divRef={ref}
+          selectedSort={selectedSort}
+          sortDirection={sortDirection}
+          setSortDirection={setSortDirection}
+          setSelectedSortAscDesc={setSelectedSortAscDesc}
+          setSelectedSort={setSelectedSort}
+          setCurrentPage={setCurrentPage}
+          setFolder={setFolder}
+          setVideoDetail={setVideoDetail}
+          setClose={setClose}
+          sdk={sdk}
+        />
+      )}
+    </div>
+  );
 };
 
 export default Dialog;

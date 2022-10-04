@@ -1,0 +1,31 @@
+.folderListParent {
+  width: auto;
+  box-shadow: 0 4px 8px rgba(55, 55, 55, 0.349);
+}
+
+.folderList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border: none;
+  justify-content: center;
+}
+
+.folderIconAndText {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  align-items: center;
+  margin: 5px;
+  background-color: #f9fbff;
+  width: 250px;
+}
+
+.folderIconAndText:hover {
+  background-color: rgb(240, 246, 255);
+}
+
+.folderListItems {
+  font-size: 14px;
+  font-weight: bold;
+}

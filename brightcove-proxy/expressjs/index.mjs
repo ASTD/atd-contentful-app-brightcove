@@ -1,47 +1,59 @@
-import fetch from 'node-fetch'
-import express from 'express'
-import cors from 'cors'
+import fetch from "node-fetch";
+import express from "express";
+import cors from "cors";
 
-const app = express()
-const port = 5001
+const app = express();
+const port = 5001;
 
 function extractApiRoute(req) {
-  return `${req.params['0']}?${new URLSearchParams(req.query).toString()}`
+  return `${req.params["0"]}?${new URLSearchParams(req.query).toString()}`;
 }
 
 function getAccessToken(clientId, clientSecret) {
-  const encodedData = Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
+  const encodedData = Buffer.from(`${clientId}:${clientSecret}`).toString(
+    "base64"
+  );
 
-  return fetch('https://oauth.brightcove.com/v4/access_token', {
-    method: 'POST',
-    body: 'grant_type=client_credentials',
+  return fetch("https://oauth.brightcove.com/v4/access_token", {
+    method: "POST",
+    body: "grant_type=client_credentials",
     headers: {
-      'Authorization': `Basic ${ encodedData }`,
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  }).then((response) => response.json())
+      Authorization: `Basic ${encodedData}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  }).then((response) => response.json());
 }
 
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? 'https://gucciogucci.github.io' : 'http://localhost:5000',
-  methods: 'GET'
-}))
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "production"
+        ? "https://gucciogucci.github.io"
+        : "http://localhost:5000",
+    methods: "GET",
+  })
+);
 
-app.get('/proxy/*', async (req, res) => {
-
-  const { access_token, token_type } = await getAccessToken(process.env.BRIGHTCOVE_CLIENT_ID, process.env.BRIGHTCOVE_CLIENT_SECRET)
+app.get("/proxy/*", async (req, res) => {
+  const { access_token, token_type } = await getAccessToken(
+    process.env.BRIGHTCOVE_CLIENT_ID,
+    process.env.BRIGHTCOVE_CLIENT_SECRET
+  );
 
   const response = await fetch(
-    `https://cms.api.brightcove.com/v1/accounts/${ process.env.BRIGHTCOVE_ACCOUNT_ID }/${ extractApiRoute(req) }`, {
+    `https://cms.api.brightcove.com/v1/accounts/${
+      process.env.BRIGHTCOVE_ACCOUNT_ID
+    }/${extractApiRoute(req)}`,
+    {
       headers: {
-        'Authorization': `${ token_type } ${ access_token }`
-      }
+        Authorization: `${token_type} ${access_token}`,
+      },
     }
-  )
+  );
 
-  res.json(await response.json())
-})
+  res.json(await response.json());
+});
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+  console.log(`Example app listening at http://localhost:${port}`);
+});
