@@ -46,7 +46,7 @@ const VideoMetaInfo = ({ sdk, video, folder, folderType }: PropType) => {
     <div
       style={{
         padding: "10px",
-        fontFamily: "Tahoma",
+        fontFamily: "Arial",
         cursor: "pointer",
       }}
       onClick={() => sdk.close(video)}
