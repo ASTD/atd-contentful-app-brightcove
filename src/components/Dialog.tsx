@@ -154,6 +154,7 @@ const Dialog = ({ sdk }: DialogProps) => {
             .then((response) => response.json())
             .catch((err) => console.log(err));
           setVideos(videos);
+          setFolderType(folder.name);
         }
       } else {
         setVideos([]);
