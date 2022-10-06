@@ -31,6 +31,7 @@ const Folders = ({ folders, setFolder }: PropType) => {
       }
     }
   };
+
   return (
     <>
       {folders.length === 0 ? (
@@ -56,7 +57,7 @@ const Folders = ({ folders, setFolder }: PropType) => {
                   key={folder.id}
                 >
                   <div onClick={() => setFolder(folder)}>
-                    <FolderIcon color="primary" sx={{ fontSize: "150px" }} />
+                    <FolderIcon color="primary" sx={{ fontSize: "100px" }} />
                   </div>
                   <div style={{ paddingBottom: "15px" }}>
                     <span

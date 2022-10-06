@@ -20,17 +20,30 @@
   pointer-events: "auto";
 }
 
-.searchDropdownFlex {
+.searchFolderDropdownFlex {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
   font-size: 12px;
-  background-color: rgb(228, 228, 228);
-  padding: 11px;
-  border-bottom-right-radius: 5px;
-  border-top-right-radius: 5px;
+  background-color: rgb(238, 238, 238);
+  padding: 9px;
   cursor: pointer;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.searchTagDropdownFlex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 12px;
+  background-color: rgb(238, 238, 238);
+  padding: 10px;
+  cursor: pointer;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .searchInput {
@@ -40,8 +53,8 @@
   padding-bottom: 20px;
   border: none;
   outline: none;
-  border-top: 1px solid rgb(208, 208, 208);
-  border-bottom: 1px solid rgb(208, 208, 208);
+  border-top: 0.5px solid rgb(208, 208, 208);
+  border-bottom: 0.5px solid rgb(208, 208, 208);
   font-size: 16px;
   color: black;
 }
@@ -51,45 +64,51 @@
   padding-bottom: 7px;
   padding-left: 10px;
   padding-right: 10px;
-  border-top: 1px solid rgb(208, 208, 208);
-  border-bottom: 1px solid rgb(208, 208, 208);
-  border-left: 1px solid rgb(208, 208, 208);
+  border-top: 0.5px solid rgb(208, 208, 208);
+  border-bottom: 0.5px solid rgb(208, 208, 208);
+  border-left: 0.5px solid rgb(208, 208, 208);
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
   color: grey;
 }
 
 .searchDropdown {
-  height: 50px;
-  font-size: 16px;
-  text-align: center;
   border: none;
   outline: none;
   border-radius: 0px 10px 10px 0;
   position: absolute;
   background-color: rgb(245, 245, 245);
-  width: 280px;
-  min-height: 180px;
   left: 50%;
-  top: 100px;
+  top: 70px;
   transform: translateX(-50%);
   border-radius: 10px;
-  padding-top: 25px;
-  height: 46.5%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  height: 60%;
   overflow-y: auto;
   cursor: pointer;
+  font-family: Tahoma;
+  text-align: center;
+  font-size: 14px;
+  width: 250px;
 }
 
-.searchDropdownFlex:hover {
-  background-color: rgb(222, 222, 222);
+.searchFolderDropdownFlex:hover {
+  background-color: rgb(233, 233, 233);
+}
+
+.searchTagDropdownFlex:hover {
+  background-color: rgb(233, 233, 233);
 }
 
 .searchDropdown li {
   padding: 15px;
-  color: rgb(245, 245, 245);
   border-radius: 5px;
+  list-style: none;
 }
 
 .searchDropdown li:hover {
-  background-color: rgb(68, 68, 68);
+  background-color: rgb(218, 218, 218);
 }

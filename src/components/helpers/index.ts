@@ -1,4 +1,4 @@
-export const imgResize = (src, size) => {
+export const imgResize = (src: string, size: { w: number; h: number }) => {
   if (size !== undefined) {
     return `${src
       ?.replace("cf-images.us-east-1.prod.boltdns.net", "https://atd.imgix.net")

@@ -1,28 +1,59 @@
-import React, { useContext } from "react";
+import React from "react";
+import { BrightcoveFolder } from "../../../types";
 import "../../DialogStyles/Search.css";
 
 type PropType = {
-  setOpenDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-  openDrawer: boolean;
+  setFolder: React.Dispatch<React.SetStateAction<BrightcoveFolder | null>>;
+  setOpenFolderDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenTagDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  setFolderType: React.Dispatch<React.SetStateAction<string>>;
+  setTagType: React.Dispatch<React.SetStateAction<string>>;
+  folders: BrightcoveFolder[];
+  openFolderDrawer: boolean;
+  openTagDrawer: boolean;
 };
 
-const SearchDropdown = ({ openDrawer, setOpenDrawer }: PropType) => {
-  //const { setAlgoliaIndex } = useContext(CheckContext);
-  return openDrawer ? (
-    <div className="searchDropdownBlur" onClick={() => setOpenDrawer(false)}>
+const SearchDropdown = ({
+  openFolderDrawer,
+  openTagDrawer,
+  folders,
+  setFolder,
+  setTagType,
+  setFolderType,
+  setCurrentPage,
+  setOpenTagDrawer,
+  setOpenFolderDrawer,
+}: PropType) => {
+  return openFolderDrawer ? (
+    <div
+      className="searchDropdownBlur"
+      onClick={() => setOpenFolderDrawer(false)}
+    >
       <ul className="searchDropdown">
-        {/* {newsletterOptions.map((item, index) => (
+        <li
+          onClick={() => {
+            setFolder(null);
+            setCurrentPage(0);
+            setFolderType("All Folders");
+            setOpenFolderDrawer(false);
+          }}
+        >
+          All Folders
+        </li>
+        {folders.map((item) => (
           <li
-            key={index}
+            key={item.id}
             onClick={() => {
-              setIndex(item);
-              setIsOpen(false);
-              setAlgoliaIndex(item);
+              setFolder(item);
+              setFolderType(item.name);
+              setCurrentPage(0);
+              setOpenFolderDrawer(false);
             }}
           >
-            {item}
+            {item.name}
           </li>
-        ))} */}
+        ))}
       </ul>
     </div>
   ) : null;

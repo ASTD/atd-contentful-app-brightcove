@@ -4,14 +4,39 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import "../../DialogStyles/Search.css";
 import SearchDropdown from "../SearchDropdown";
+import FolderIcon from "@mui/icons-material/Folder";
+import LabelIcon from "@mui/icons-material/Label";
+import { BrightcoveFolder } from "../../../types";
 
-const Search = () => {
-  const [folderType, setFolderType] = useState("All Folders");
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
-  const [searchInput, setSearchInput] = useState<string>("");
+type Proptype = {
+  folders: BrightcoveFolder[];
+  searchInput: string;
+  folderType: string;
+  tagType: string;
+  setFolder: React.Dispatch<React.SetStateAction<BrightcoveFolder | null>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  setSearchInput: React.Dispatch<React.SetStateAction<string>>;
+  setFolderType: React.Dispatch<React.SetStateAction<string>>;
+  setTagType: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const Search = ({
+  folders,
+  tagType,
+  folderType,
+  searchInput,
+  setSearchInput,
+  setCurrentPage,
+  setFolderType,
+  setTagType,
+  setFolder,
+}: Proptype) => {
+  const [openFolderDrawer, setOpenFolderDrawer] = useState<boolean>(false);
+  const [openTagDrawer, setOpenTagDrawer] = useState<boolean>(false);
 
   const handleChange = (event: any) => {
     setSearchInput(event.currentTarget.value.replace(/[^a-zA-Z0-9\s]/g, ""));
+    setCurrentPage(0);
   };
 
   return (
@@ -29,7 +54,33 @@ const Search = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="searchDropdownFlex" onClick={() => setOpenDrawer(true)}>
+        <div
+          className="searchFolderDropdownFlex"
+          onClick={() => setOpenFolderDrawer(true)}
+        >
+          <div style={{ paddingTop: "4px" }}>
+            <FolderIcon />
+          </div>
+          <div
+            style={{
+              paddingLeft: "6px",
+              fontFamily: "Tahoma",
+              fontSize: "13px",
+            }}
+          >
+            {folderType}
+          </div>
+          <div style={{ paddingTop: "5px" }}>
+            {openFolderDrawer ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+          </div>
+        </div>
+        {/* <div
+          className="searchTagDropdownFlex"
+          onClick={() => setOpenTagDrawer(true)}
+        >
+          <div>
+            <LabelIcon />
+          </div>
           <div
             style={{
               paddingLeft: "6px",
@@ -37,15 +88,24 @@ const Search = () => {
               fontSize: "13px",
             }}
           >
-            {folderType}
+            {tagType}
           </div>
-          <div>&nbsp;</div>
           <div style={{ paddingTop: "4px" }}>
-            {openDrawer ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+            {openTagDrawer ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
           </div>
-        </div>
+        </div> */}
       </div>
-      <SearchDropdown openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
+      <SearchDropdown
+        openFolderDrawer={openFolderDrawer}
+        openTagDrawer={openTagDrawer}
+        folders={folders}
+        setFolder={setFolder}
+        setTagType={setTagType}
+        setFolderType={setFolderType}
+        setCurrentPage={setCurrentPage}
+        setOpenTagDrawer={setOpenTagDrawer}
+        setOpenFolderDrawer={setOpenFolderDrawer}
+      />
     </div>
   );
 };

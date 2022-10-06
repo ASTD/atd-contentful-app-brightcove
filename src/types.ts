@@ -27,12 +27,18 @@ type Image = {
   sources: Source[];
 };
 
+export type BrightcoveSearchResultVideoCount = {
+  count: number;
+};
+
 export type BrightcoveVideo = {
   account_id: string;
   created_at: string;
+  folder_id: string;
   id: string;
   name: string;
   updated_at: string;
+  published_at: string;
   description: string;
   long_description: string;
   state: string;
@@ -41,5 +47,6 @@ export type BrightcoveVideo = {
   images: {
     poster?: Image;
     thumbnail?: Image;
+    square?: Image;
   };
 };

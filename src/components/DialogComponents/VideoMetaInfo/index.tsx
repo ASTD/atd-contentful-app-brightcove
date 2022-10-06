@@ -1,13 +1,21 @@
 import { DialogExtensionSDK } from "@contentful/app-sdk";
+import { useEffect, useState } from "react";
 import { BrightcoveFolder, BrightcoveVideo } from "../../../types";
+import { AppInstallationParameters } from "../../ConfigScreen";
 
 type PropType = {
+  folderType: string;
   video: BrightcoveVideo;
-  folder: BrightcoveFolder | null;
   sdk: DialogExtensionSDK;
+  folder: BrightcoveFolder | null;
 };
 
-const VideoMetaInfo = ({ video, folder, sdk }: PropType) => {
+const VideoMetaInfo = ({ sdk, video, folder, folderType }: PropType) => {
+  const { proxyUrl } = (sdk.parameters
+    .installation as unknown) as AppInstallationParameters;
+
+  const [folderName, setFolderName] = useState<string>("");
+
   const convertDuration = (milisecs: number) => {
     let toMinutes = milisecs / 60000;
     if (toMinutes > 60) {
@@ -20,6 +28,20 @@ const VideoMetaInfo = ({ video, folder, sdk }: PropType) => {
       return `${Math.ceil(toMinutes)}min`;
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      if (folderType === "All Folders") {
+        const folder: BrightcoveFolder = await fetch(
+          `${proxyUrl}/folders/${video.folder_id}`
+        )
+          .then((response) => response.json())
+          .catch((err) => console.log(err));
+        setFolderName(folder.name);
+      }
+    })();
+  });
+
   return (
     <div
       style={{
@@ -56,39 +78,49 @@ const VideoMetaInfo = ({ video, folder, sdk }: PropType) => {
           <br />
           <span style={{ fontSize: "12px" }}>
             <span style={{ color: "grey" }}>Folder: </span>
-            {folder !== null ? folder.name : "Unknown"}
+            {folder !== null ? folder.name : folderName}
           </span>
         </div>
-        <div style={{ paddingLeft: "100px" }}>&nbsp;</div>
-        <div>
+        <div style={{ paddingLeft: "50px" }}>&nbsp;</div>
+        <div style={{ whiteSpace: "nowrap" }}>
           <span style={{ fontSize: "12px" }}>
             <span style={{ color: "grey" }}>Updated: </span>
             {new Date(video.updated_at).toLocaleDateString()}
           </span>
           <br />
           <span style={{ fontSize: "12px" }}>
-            <span style={{ color: "grey" }}>Description: </span>
-            {video.description ? video.description : "None"}
+            <span style={{ color: "grey" }}>Published: </span>
+            {new Date(video.published_at).toLocaleDateString()}
           </span>
           <br />
           <span style={{ fontSize: "12px" }}>
-            <span style={{ color: "grey" }}>Tags: </span>
-            {video.tags.length > 0
-              ? video.tags.map((tag) => (
-                  <span
-                    key={video.id}
-                    style={{
-                      margin: "2px",
-                      padding: "4px",
-                      borderRadius: "5px",
-                      backgroundColor: "rgb(239,239,239)",
-                      display: "inline-block",
-                    }}
-                  >
-                    {tag}
-                  </span>
-                ))
-              : "None"}
+            <span style={{ color: "grey" }}>State: </span>
+            {video.state}
+          </span>
+        </div>
+        <div style={{ paddingLeft: "50px" }}>&nbsp;</div>
+        <div>
+          <span style={{ fontSize: "12px" }}>
+            {video.tags.length > 0 ? (
+              video.tags.map((tag) => (
+                <span
+                  key={video.id}
+                  style={{
+                    margin: "2px",
+                    padding: "5px",
+                    borderRadius: "5px",
+                    backgroundColor: "rgb(239,239,239)",
+                    display: "inline-block",
+                  }}
+                >
+                  {tag}
+                </span>
+              ))
+            ) : (
+              <span>
+                <span style={{ color: "grey" }}>Tags:</span> None
+              </span>
+            )}
           </span>
         </div>
       </div>

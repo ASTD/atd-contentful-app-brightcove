@@ -9,19 +9,19 @@ import "../../DialogStyles/Video.css";
 type PropType = {
   selectedSort: string;
   sortDirection: string;
+  setSelectedSortAscDesc: React.Dispatch<React.SetStateAction<string>>;
   setSortDirection: React.Dispatch<React.SetStateAction<string>>;
   setSelectedSort: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedSortAscDesc: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const sortOptions = ["created_at", "published_at", "updated_at", "name"];
 
-const FolderSpecificVideosSort = ({
+const VideosSort = ({
   selectedSort,
   sortDirection,
+  setSelectedSortAscDesc,
   setSortDirection,
   setSelectedSort,
-  setSelectedSortAscDesc,
 }: PropType) => {
   const [openSortOptions, setOpenSortOptions] = useState<boolean>(false);
   const ref = React.createRef<HTMLDivElement>();
@@ -129,6 +129,7 @@ const FolderSpecificVideosSort = ({
         <ul style={{ padding: 0, listStyle: "none", cursor: "pointer" }}>
           {sortDirection === "latest" ? (
             <li
+              title="Descending"
               onClick={() => {
                 setSelectedSortAscDesc("");
                 setSortDirection("oldest");
@@ -140,6 +141,7 @@ const FolderSpecificVideosSort = ({
             </li>
           ) : (
             <li
+              title="Ascending"
               onClick={() => {
                 setSelectedSortAscDesc("-");
                 setSortDirection("latest");
@@ -156,4 +158,4 @@ const FolderSpecificVideosSort = ({
   );
 };
 
-export default FolderSpecificVideosSort;
+export default VideosSort;
