@@ -24,15 +24,7 @@ function getAccessToken(clientId, clientSecret) {
   }).then((response) => response.json());
 }
 
-app.use(
-  cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? "https://gucciogucci.github.io"
-        : "http://localhost:5000",
-    methods: "GET",
-  })
-);
+app.use(cors());
 
 app.get("/proxy/*", async (req, res) => {
   const { access_token, token_type } = await getAccessToken(
