@@ -51,19 +51,15 @@ const VideoMetaInfo = ({ sdk, video, folder, folderType }: PropType) => {
       }}
       onClick={() => (video.state !== "ACTIVE" ? null : sdk.close(video))}
     >
-      <span
+      <div
         style={{
           fontWeight: "bold",
           fontSize: "14px",
+          marginBottom: "10px",
         }}
       >
         {video.name}
-      </span>
-      <br
-        style={{
-          marginBottom: "10px",
-        }}
-      />
+      </div>
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div style={{ whiteSpace: "nowrap" }}>
           <span style={{ fontSize: "12px" }}>
