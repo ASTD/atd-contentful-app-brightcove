@@ -33,19 +33,6 @@
   border-bottom-right-radius: 5px;
 }
 
-.searchTagDropdownFlex {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  font-size: 12px;
-  background-color: rgb(238, 238, 238);
-  padding: 10px;
-  cursor: pointer;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
 .searchInput {
   width: 300px;
   height: 10px;
@@ -59,11 +46,73 @@
   color: black;
 }
 
+.searchInputTag {
+  width: 300px;
+  height: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  outline: none;
+  border-top: 0.5px solid rgb(208, 208, 208);
+  border-bottom: 0.5px solid rgb(208, 208, 208);
+  border-left: none;
+  font-size: 16px;
+  color: black;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-right: 0.5px solid rgb(208, 208, 208);
+}
+
+.searchInputTagWithClose {
+  width: 300px;
+  height: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  outline: none;
+  border-top: 0.5px solid rgb(208, 208, 208);
+  border-bottom: 0.5px solid rgb(208, 208, 208);
+  border-left: none;
+  font-size: 16px;
+  color: black;
+  border-right: none;
+}
+
 .searchIcon {
   padding-top: 13.5px;
   padding-bottom: 7px;
   padding-left: 10px;
   padding-right: 10px;
+  border-top: 0.5px solid rgb(208, 208, 208);
+  border-bottom: 0.5px solid rgb(208, 208, 208);
+  border-left: 0.5px solid rgb(208, 208, 208);
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  color: grey;
+}
+
+.searchTagCloseIcon {
+  border-top-right-radius: 5px;
+  border-top: 0.5px solid rgb(208, 208, 208);
+  border-bottom: 0.5px solid rgb(208, 208, 208);
+  border-bottom-right-radius: 5px;
+  border-right: 0.5px solid rgb(208, 208, 208);
+  border-left: none;
+  color: grey;
+  padding-top: 13.4px;
+  padding-bottom: 7px;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+.searchTagCloseIcon:hover {
+  color: black;
+}
+
+.searchIconTag {
+  padding-top: 13.1px;
+  padding-bottom: 7.3px;
+  padding-left: 10px;
+  padding-right: 12px;
   border-top: 0.5px solid rgb(208, 208, 208);
   border-bottom: 0.5px solid rgb(208, 208, 208);
   border-left: 0.5px solid rgb(208, 208, 208);
@@ -96,10 +145,6 @@
 }
 
 .searchFolderDropdownFlex:hover {
-  background-color: rgb(233, 233, 233);
-}
-
-.searchTagDropdownFlex:hover {
   background-color: rgb(233, 233, 233);
 }
 

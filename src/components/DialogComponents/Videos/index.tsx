@@ -6,7 +6,6 @@ import {
 } from "@contentful/forma-36-react-components";
 import {
   Card,
-  CardActions,
   CardContent,
   CardMedia,
   Pagination,
@@ -20,11 +19,10 @@ import {
 } from "../../../types";
 import { EntityListSkeleton } from "../../ui";
 import { css } from "emotion";
-import InfoIcon from "@mui/icons-material/Info";
-import CloseIcon from "@mui/icons-material/Close";
 import VideosSort from "../VideosSort";
 import VideoMetaInfo from "../VideoMetaInfo";
 import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
+import VideoCardActions from "../CardActions";
 
 type PropType = {
   searchResultVideoCount: BrightcoveSearchResultVideoCount | undefined;
@@ -37,9 +35,11 @@ type PropType = {
   currentPage: number;
   videoDetail: string;
   folderType: string;
+  loading: boolean;
   close: boolean;
   setFolder: React.Dispatch<React.SetStateAction<BrightcoveFolder | null>>;
   setSelectedSortAscDesc: React.Dispatch<React.SetStateAction<string>>;
+  setSearchInputTag: React.Dispatch<React.SetStateAction<string>>;
   setSortDirection: React.Dispatch<React.SetStateAction<string>>;
   setSelectedSort: React.Dispatch<React.SetStateAction<string>>;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
@@ -55,12 +55,14 @@ const Videos = ({
   selectedSort,
   currentPage,
   videoDetail,
-  folderType,
-  folder,
   videoDivRef,
+  folderType,
+  loading,
+  folder,
   close,
   sdk,
   setSelectedSortAscDesc,
+  setSearchInputTag,
   setSortDirection,
   setSelectedSort,
   setVideoDetail,
@@ -91,12 +93,14 @@ const Videos = ({
 
   return (
     <>
-      {searchResultVideos.length === 0 ? (
+      {loading ? (
         <ModalContent data-testid="modal-spinner">
           <Spinner
             className={css`
               margin: 4px auto;
               display: block;
+              padding-top: 130px;
+              padding-bottom: 130px;
             `}
           />
         </ModalContent>
@@ -118,21 +122,42 @@ const Videos = ({
               justifyContent: "space-between",
             }}
           >
-            <div>
-              <Button
-                data-testid="back-to-folders"
-                buttonType="muted"
-                onClick={() => {
-                  setFolder(null);
-                  setCurrentPage(0);
-                  setSelectedSort("created_at");
-                  setSelectedSortAscDesc("-");
-                  setSortDirection("latest");
-                  setSearchInput("");
-                }}
-              >
-                Clear Search
-              </Button>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-around",
+              }}
+            >
+              <div>
+                <Button
+                  data-testid="back-to-folders"
+                  buttonType="muted"
+                  onClick={() => {
+                    setSearchInput("");
+                    setCurrentPage(0);
+                    setFolder(null);
+                  }}
+                >
+                  Clear Search
+                </Button>
+              </div>
+              <div style={{ paddingLeft: "15px" }}>&nbsp;</div>
+              <div>
+                <Button
+                  data-testid="back-to-folders"
+                  buttonType="muted"
+                  onClick={() => {
+                    setSelectedSort("updated_at");
+                    setSelectedSortAscDesc("-");
+                    setSortDirection("latest");
+                    setCurrentPage(0);
+                  }}
+                >
+                  Clear Filter
+                </Button>
+              </div>
             </div>
             <div
               style={{
@@ -149,6 +174,7 @@ const Videos = ({
               <VideosSort
                 selectedSort={selectedSort}
                 sortDirection={sortDirection}
+                setCurrentPage={setCurrentPage}
                 setSelectedSort={setSelectedSort}
                 setSortDirection={setSortDirection}
                 setSelectedSortAscDesc={setSelectedSortAscDesc}
@@ -184,13 +210,18 @@ const Videos = ({
                       ) : (
                         <div
                           style={{
-                            cursor: "pointer",
+                            cursor:
+                              video.state !== "ACTIVE"
+                                ? "not-allowed"
+                                : "pointer",
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "flex-start",
                             alignItems: "center",
                           }}
-                          onClick={() => sdk.close(video)}
+                          onClick={() =>
+                            video.state !== "ACTIVE" ? null : sdk.close(video)
+                          }
                         >
                           {video.images.poster?.src ? (
                             <CardMedia
@@ -215,41 +246,15 @@ const Videos = ({
                           </CardContent>
                         </div>
                       )}
-                      <CardActions
-                        style={{
-                          display: "flex",
-                          flexDirection: "row-reverse",
-                          justifyContent: "space-between",
-                          backgroundColor: "rgb(239,239,239)",
-                        }}
-                      >
-                        {close &&
-                        searchResultVideos
-                          .map((item, count) => {
-                            if (item.id === videoDetail) {
-                              return count;
-                            }
-                          })
-                          .indexOf(index) === index ? (
-                          <CloseIcon
-                            fontSize="small"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              videoDetails("null");
-                              setClose(false);
-                            }}
-                          />
-                        ) : (
-                          <InfoIcon
-                            fontSize="small"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              videoDetails(video.id);
-                              setClose(true);
-                            }}
-                          />
-                        )}
-                      </CardActions>
+                      <VideoCardActions
+                        mappedIndex={index}
+                        mappedVideo={video}
+                        showVideoDetail={close}
+                        setShowVideoDetail={setClose}
+                        allVideos={searchResultVideos}
+                        selectedVideoDetail={videoDetail}
+                        selectedVideoDetailFunc={videoDetails}
+                      />
                     </Card>
                   </div>
                 ))}

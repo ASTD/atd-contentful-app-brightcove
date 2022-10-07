@@ -7,35 +7,46 @@ import SearchDropdown from "../SearchDropdown";
 import FolderIcon from "@mui/icons-material/Folder";
 import LabelIcon from "@mui/icons-material/Label";
 import { BrightcoveFolder } from "../../../types";
+import CloseIcon from "@mui/icons-material/Close";
 
 type Proptype = {
   folders: BrightcoveFolder[];
+  searchInputTag: string;
   searchInput: string;
   folderType: string;
-  tagType: string;
   setFolder: React.Dispatch<React.SetStateAction<BrightcoveFolder | null>>;
+  setSelectedSortAscDesc: React.Dispatch<React.SetStateAction<string>>;
+  setSearchInputTag: React.Dispatch<React.SetStateAction<string>>;
+  setSortDirection: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedSort: React.Dispatch<React.SetStateAction<string>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
   setFolderType: React.Dispatch<React.SetStateAction<string>>;
-  setTagType: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const Search = ({
   folders,
-  tagType,
   folderType,
   searchInput,
+  searchInputTag,
+  setSelectedSortAscDesc,
+  setSearchInputTag,
+  setSortDirection,
+  setSelectedSort,
   setSearchInput,
   setCurrentPage,
   setFolderType,
-  setTagType,
   setFolder,
 }: Proptype) => {
   const [openFolderDrawer, setOpenFolderDrawer] = useState<boolean>(false);
-  const [openTagDrawer, setOpenTagDrawer] = useState<boolean>(false);
 
-  const handleChange = (event: any) => {
+  const handleSearchChange = (event: any) => {
     setSearchInput(event.currentTarget.value.replace(/[^a-zA-Z0-9\s]/g, ""));
+    setCurrentPage(0);
+  };
+
+  const handleTagChange = (event: any) => {
+    setSearchInputTag(event.currentTarget.value.replace(/[^a-zA-Z0-9\s]/g, ""));
     setCurrentPage(0);
   };
 
@@ -51,7 +62,7 @@ const Search = ({
             placeholder="Search videos"
             type="text"
             value={searchInput}
-            onChange={handleChange}
+            onChange={handleSearchChange}
           />
         </div>
         <div
@@ -74,37 +85,40 @@ const Search = ({
             {openFolderDrawer ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
           </div>
         </div>
-        {/* <div
-          className="searchTagDropdownFlex"
-          onClick={() => setOpenTagDrawer(true)}
-        >
-          <div>
-            <LabelIcon />
+      </div>
+      <div className="searchContainer">
+        <div className="searchIconTag">
+          <LabelIcon />
+        </div>
+        <div>
+          <input
+            className={
+              searchInputTag === ""
+                ? "searchInputTag"
+                : "searchInputTagWithClose"
+            }
+            placeholder="Search by tags"
+            type="text"
+            value={searchInputTag}
+            onChange={handleTagChange}
+          />
+        </div>
+        {searchInputTag !== "" ? (
+          <div className="searchTagCloseIcon">
+            <CloseIcon onClick={() => setSearchInputTag("")} />
           </div>
-          <div
-            style={{
-              paddingLeft: "6px",
-              fontFamily: "Arial",
-              fontSize: "13px",
-            }}
-          >
-            {tagType}
-          </div>
-          <div style={{ paddingTop: "4px" }}>
-            {openTagDrawer ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-          </div>
-        </div> */}
+        ) : null}
       </div>
       <SearchDropdown
-        openFolderDrawer={openFolderDrawer}
-        openTagDrawer={openTagDrawer}
         folders={folders}
         setFolder={setFolder}
-        setTagType={setTagType}
         setFolderType={setFolderType}
         setCurrentPage={setCurrentPage}
-        setOpenTagDrawer={setOpenTagDrawer}
+        setSelectedSort={setSelectedSort}
+        setSortDirection={setSortDirection}
+        openFolderDrawer={openFolderDrawer}
         setOpenFolderDrawer={setOpenFolderDrawer}
+        setSelectedSortAscDesc={setSelectedSortAscDesc}
       />
     </div>
   );

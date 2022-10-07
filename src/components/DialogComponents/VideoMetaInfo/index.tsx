@@ -47,9 +47,9 @@ const VideoMetaInfo = ({ sdk, video, folder, folderType }: PropType) => {
       style={{
         padding: "10px",
         fontFamily: "Arial",
-        cursor: "pointer",
+        cursor: video.state !== "ACTIVE" ? "not-allowed" : "pointer",
       }}
-      onClick={() => sdk.close(video)}
+      onClick={() => (video.state !== "ACTIVE" ? null : sdk.close(video))}
     >
       <span
         style={{
@@ -78,7 +78,11 @@ const VideoMetaInfo = ({ sdk, video, folder, folderType }: PropType) => {
           <br />
           <span style={{ fontSize: "12px" }}>
             <span style={{ color: "grey" }}>Folder: </span>
-            {folder !== null ? folder.name : folderName}
+            {folder !== null
+              ? folder.name
+              : folderName !== undefined
+              ? folderName
+              : "None"}
           </span>
         </div>
         <div style={{ paddingLeft: "50px" }}>&nbsp;</div>
@@ -94,7 +98,7 @@ const VideoMetaInfo = ({ sdk, video, folder, folderType }: PropType) => {
           </span>
           <br />
           <span style={{ fontSize: "12px" }}>
-            <span style={{ color: "grey" }}>State: </span>
+            <span style={{ color: "grey" }}>Status: </span>
             {video.state}
           </span>
         </div>

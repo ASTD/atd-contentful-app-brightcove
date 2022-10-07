@@ -21,16 +21,19 @@ type PropType = {
   currentPage: number;
   folderType: string;
   searchText: string;
+  searchTag: string;
+  loading: boolean;
   close: boolean;
   setFolder: React.Dispatch<React.SetStateAction<BrightcoveFolder | null>>;
   setSelectedSortAscDesc: React.Dispatch<React.SetStateAction<string>>;
+  setSearchInputTag: React.Dispatch<React.SetStateAction<string>>;
   setSortDirection: React.Dispatch<React.SetStateAction<string>>;
   setSelectedSort: React.Dispatch<React.SetStateAction<string>>;
   setVideoDetail: React.Dispatch<React.SetStateAction<string>>;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   setFolderType: React.Dispatch<React.SetStateAction<string>>;
   setClose: React.Dispatch<React.SetStateAction<boolean>>;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const FolderSpecificVideos = ({
@@ -43,11 +46,14 @@ const FolderSpecificVideos = ({
   searchText,
   videoCount,
   folderType,
+  searchTag,
+  loading,
   folder,
   videos,
   close,
   sdk,
   setSelectedSortAscDesc,
+  setSearchInputTag,
   setSortDirection,
   setSelectedSort,
   setVideoDetail,
@@ -79,7 +85,7 @@ const FolderSpecificVideos = ({
 
   return (
     <>
-      {searchText !== "" ? (
+      {searchText !== "" || searchTag !== "" ? (
         <SearchFolderSpecificVideos
           allVideosInFolder={allVideosInFolder}
           sortDirection={sortDirection}
@@ -89,9 +95,12 @@ const FolderSpecificVideos = ({
           videoDetail={videoDetail}
           searchText={searchText}
           folderType={folderType}
+          searchTag={searchTag}
+          loading={loading}
           folder={folder}
           close={close}
           setSelectedSortAscDesc={setSelectedSortAscDesc}
+          setSearchInputTag={setSearchInputTag}
           changePageNumber={changePageNumber}
           setSortDirection={setSortDirection}
           setSelectedSort={setSelectedSort}
@@ -111,7 +120,6 @@ const FolderSpecificVideos = ({
           currentPage={currentPage}
           videoDetail={videoDetail}
           videoCount={videoCount}
-          searchText={searchText}
           folderType={folderType}
           folder={folder}
           videos={videos}
@@ -120,7 +128,6 @@ const FolderSpecificVideos = ({
           changePageNumber={changePageNumber}
           setSortDirection={setSortDirection}
           setSelectedSort={setSelectedSort}
-          setSearchInput={setSearchInput}
           setCurrentPage={setCurrentPage}
           setFolderType={setFolderType}
           videoDetails={videoDetails}

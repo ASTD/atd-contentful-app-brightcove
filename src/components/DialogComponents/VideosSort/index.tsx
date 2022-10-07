@@ -12,6 +12,7 @@ type PropType = {
   setSelectedSortAscDesc: React.Dispatch<React.SetStateAction<string>>;
   setSortDirection: React.Dispatch<React.SetStateAction<string>>;
   setSelectedSort: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const sortOptions = ["created_at", "published_at", "updated_at", "name"];
@@ -22,6 +23,7 @@ const VideosSort = ({
   setSelectedSortAscDesc,
   setSortDirection,
   setSelectedSort,
+  setCurrentPage,
 }: PropType) => {
   const [openSortOptions, setOpenSortOptions] = useState<boolean>(false);
   const ref = React.createRef<HTMLDivElement>();
@@ -114,6 +116,7 @@ const VideosSort = ({
                     onClick={() => {
                       setOpenSortOptions(false);
                       setSelectedSort(sort);
+                      setCurrentPage(0);
                     }}
                   >
                     {alterSortText(sort)}
@@ -133,6 +136,7 @@ const VideosSort = ({
               onClick={() => {
                 setSelectedSortAscDesc("");
                 setSortDirection("oldest");
+                setCurrentPage(0);
               }}
             >
               <Button buttonType="muted" style={{ paddingTop: "8px" }}>
@@ -145,6 +149,7 @@ const VideosSort = ({
               onClick={() => {
                 setSelectedSortAscDesc("-");
                 setSortDirection("latest");
+                setCurrentPage(0);
               }}
             >
               <Button buttonType="muted" style={{ paddingTop: "8px" }}>

@@ -4,26 +4,26 @@ import "../../DialogStyles/Search.css";
 
 type PropType = {
   setFolder: React.Dispatch<React.SetStateAction<BrightcoveFolder | null>>;
+  setSelectedSortAscDesc: React.Dispatch<React.SetStateAction<string>>;
   setOpenFolderDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-  setOpenTagDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+  setSortDirection: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedSort: React.Dispatch<React.SetStateAction<string>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   setFolderType: React.Dispatch<React.SetStateAction<string>>;
-  setTagType: React.Dispatch<React.SetStateAction<string>>;
   folders: BrightcoveFolder[];
   openFolderDrawer: boolean;
-  openTagDrawer: boolean;
 };
 
 const SearchDropdown = ({
   openFolderDrawer,
-  openTagDrawer,
   folders,
   setFolder,
-  setTagType,
   setFolderType,
   setCurrentPage,
-  setOpenTagDrawer,
+  setSelectedSort,
+  setSortDirection,
   setOpenFolderDrawer,
+  setSelectedSortAscDesc,
 }: PropType) => {
   return openFolderDrawer ? (
     <div
@@ -35,8 +35,11 @@ const SearchDropdown = ({
           onClick={() => {
             setFolder(null);
             setCurrentPage(0);
-            setFolderType("All Folders");
+            setSortDirection("latest");
             setOpenFolderDrawer(false);
+            setSelectedSortAscDesc("-");
+            setFolderType("All Folders");
+            setSelectedSort("updated_at");
           }}
         >
           All Folders
@@ -46,9 +49,12 @@ const SearchDropdown = ({
             key={item.id}
             onClick={() => {
               setFolder(item);
-              setFolderType(item.name);
               setCurrentPage(0);
+              setFolderType(item.name);
+              setSortDirection("latest");
               setOpenFolderDrawer(false);
+              setSelectedSortAscDesc("-");
+              setSelectedSort("updated_at");
             }}
           >
             {item.name}

@@ -8,7 +8,8 @@ import FolderIcon from "@mui/icons-material/Folder";
 import { BrightcoveFolder } from "../../../types";
 import "../../DialogStyles/Folder.css";
 import { Pagination, Stack } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import React from "react";
 
 type PropType = {
   folders: BrightcoveFolder[];
@@ -16,7 +17,15 @@ type PropType = {
 };
 
 const Folders = ({ folders, setFolder }: PropType) => {
+  const ref = React.createRef<HTMLDivElement>();
+
   const [currentPage, setCurrentPage] = useState<number>(0);
+
+  useEffect(() => {
+    if (ref.current !== null) {
+      ref.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [currentPage]);
 
   const changePageNumber = (event: any) => {
     if (event.currentTarget.attributes[3].nodeValue === "Go to previous page") {
@@ -40,12 +49,14 @@ const Folders = ({ folders, setFolder }: PropType) => {
             className={css`
               margin: 4px auto;
               display: block;
+              padding-top: 130px;
+              padding-bottom: 130px;
             `}
           />
         </ModalContent>
       ) : (
         <ModalContent data-testid="modal-folders" className="folderListParent">
-          <div style={{ color: "grey", paddingBottom: "10px" }}>
+          <div ref={ref} style={{ color: "grey", paddingBottom: "10px" }}>
             {folders.length} assets
           </div>
           <EntityList data-testid="folder-list" className="folderList">
