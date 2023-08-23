@@ -19,6 +19,8 @@ import { BrightcoveFolder, BrightcoveVideo } from "../../../../types";
 import VideosSort from "../../VideosSort";
 import VideoMetaInfo from "../../VideoMetaInfo";
 import VideoCardActions from "../../CardActions";
+import useVersion from "../../../hooks/useVersion";
+import { autofill } from "../../../helpers";
 
 type PropType = {
   folderDivRef: React.LegacyRef<HTMLDivElement>;
@@ -73,6 +75,7 @@ const SearchFolderSpecificVideos = ({
   setFolder,
   setClose,
 }: PropType) => {
+  const version = useVersion(sdk);
   let searchFolderSpecificVideos: BrightcoveVideo[];
 
   if (searchText !== "" && searchTag === "") {
@@ -229,9 +232,7 @@ const SearchFolderSpecificVideos = ({
                               justifyContent: "flex-start",
                               alignItems: "center",
                             }}
-                            onClick={() =>
-                              video.state !== "ACTIVE" ? null : sdk.close(video)
-                            }
+                            onClick={() => autofill(video, version, sdk)}
                           >
                             {video.images.poster?.src ? (
                               <CardMedia

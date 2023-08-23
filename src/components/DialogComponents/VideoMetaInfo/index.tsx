@@ -2,6 +2,8 @@ import { DialogExtensionSDK } from "@contentful/app-sdk";
 import { useEffect, useState } from "react";
 import { BrightcoveFolder, BrightcoveVideo } from "../../../types";
 import { AppInstallationParameters } from "../../ConfigScreen";
+import { autofill } from "../../helpers";
+import useVersion from "../../hooks/useVersion";
 
 type PropType = {
   folderType: string;
@@ -15,6 +17,7 @@ const VideoMetaInfo = ({ sdk, video, folder, folderType }: PropType) => {
     .installation as unknown) as AppInstallationParameters;
 
   const [folderName, setFolderName] = useState<string>("");
+  const version = useVersion(sdk);
 
   const convertDuration = (milisecs: number) => {
     let toMinutes = milisecs / 60000;
@@ -49,7 +52,7 @@ const VideoMetaInfo = ({ sdk, video, folder, folderType }: PropType) => {
         fontFamily: "Arial",
         cursor: video.state !== "ACTIVE" ? "not-allowed" : "pointer",
       }}
-      onClick={() => (video.state !== "ACTIVE" ? null : sdk.close(video))}
+      onClick={() => autofill(video, version, sdk)}
     >
       <div
         style={{
