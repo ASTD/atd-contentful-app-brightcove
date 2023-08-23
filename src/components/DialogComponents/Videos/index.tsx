@@ -23,6 +23,9 @@ import VideosSort from "../VideosSort";
 import VideoMetaInfo from "../VideoMetaInfo";
 import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
 import VideoCardActions from "../CardActions";
+import { useEffect, useState } from "react";
+import useVersion from "../../hooks/useVersion";
+import { autofill } from "../../helpers";
 
 type PropType = {
   searchResultVideoCount: BrightcoveSearchResultVideoCount | undefined;
@@ -71,6 +74,8 @@ const Videos = ({
   setFolder,
   setClose,
 }: PropType) => {
+  const version = useVersion(sdk);
+
   const changePageNumber = (event: any) => {
     if (event.currentTarget.attributes[3].nodeValue === "Go to previous page") {
       setCurrentPage(currentPage - 1);
@@ -219,9 +224,7 @@ const Videos = ({
                             justifyContent: "flex-start",
                             alignItems: "center",
                           }}
-                          onClick={() =>
-                            video.state !== "ACTIVE" ? null : sdk.close(video)
-                          }
+                          onClick={() => autofill(video, version, sdk)}
                         >
                           {video.images.poster?.src ? (
                             <CardMedia

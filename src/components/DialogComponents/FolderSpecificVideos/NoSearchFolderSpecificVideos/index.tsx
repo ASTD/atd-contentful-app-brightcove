@@ -23,6 +23,8 @@ import {
 import VideosSort from "../../VideosSort";
 import VideoMetaInfo from "../../VideoMetaInfo";
 import VideoCardActions from "../../CardActions";
+import { autofill } from "../../../helpers";
+import useVersion from "../../../hooks/useVersion";
 
 type PropType = {
   videoCount: FolderSpecificBrightcoveVideos | null;
@@ -69,6 +71,8 @@ const NoSearchFolderSpecificVideos = ({
   setFolder,
   setClose,
 }: PropType) => {
+  const version = useVersion(sdk);
+
   return (
     <>
       {videos.length === 0 ? (
@@ -217,9 +221,7 @@ const NoSearchFolderSpecificVideos = ({
                           justifyContent: "flex-start",
                           alignItems: "center",
                         }}
-                        onClick={() =>
-                          video.state !== "ACTIVE" ? null : sdk.close(video)
-                        }
+                        onClick={() => autofill(video, version, sdk)}
                       >
                         {video.images.poster?.src ? (
                           <CardMedia

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const imgResize = (src: string, size: { w: number; h: number }) => {
   if (size !== undefined) {
     return `${src
@@ -23,4 +25,93 @@ export const imgResize = (src: string, size: { w: number; h: number }) => {
       "https://atd-brightspot-lower.imgix.net"
       //)}?${resize}&fit=crop`
     );
+};
+
+export const autofill = (video: any, version: any, sdk: any) => {
+  if (video.state === "ACTIVE") {
+    axios
+      .put(
+        `https://api.contentful.com/spaces/${sdk.ids["space"]}/environments/${sdk.ids["environment"]}/entries/${sdk.ids["entry"]}`,
+        {
+          fields: {
+            title: {
+              "en-US": video.name || "",
+            },
+            slug: {
+              "en-US":
+                `video/${video.name.replace(/\s+/g, "-").toLowerCase()}` || "",
+            },
+            contentType: {
+              "en-US": {
+                sys: {
+                  id: "4mK4PEH0iLYPGhfmisfHgN",
+                  type: "Link",
+                  linkType: "Entry",
+                },
+              },
+            },
+            body: {
+              "en-US": {
+                content: [
+                  {
+                    nodeType: "paragraph",
+                    data: {},
+                    content: [
+                      {
+                        value: video.long_description || "",
+                        nodeType: "text",
+                        marks: [],
+                        data: {},
+                      },
+                    ],
+                  },
+                ],
+                data: {},
+                nodeType: "document",
+              },
+            },
+            description: {
+              "en-US": {
+                content: [
+                  {
+                    nodeType: "paragraph",
+                    data: {},
+                    content: [
+                      {
+                        value: video.description || "",
+                        nodeType: "text",
+                        marks: [],
+                        data: {},
+                      },
+                    ],
+                  },
+                ],
+                data: {},
+                nodeType: "document",
+              },
+            },
+            metaKeywords: {
+              "en-US": video.tags || "",
+            },
+            metaDescription: {
+              "en-US": video.description || "",
+            },
+            metaTitle: {
+              "en-US": video.name || "",
+            },
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_CMA_TOKEN}`,
+            "Content-Type": "application/vnd.contentful.management.v1+json",
+            "X-Contentful-Content-Type": sdk.ids["contentType"],
+            "X-Contentful-Version": version,
+          },
+        }
+      )
+      .then((res) => console.log("AUTO FILL", res.status))
+      .catch((err) => console.log(err));
+    sdk.close(video);
+  }
 };
