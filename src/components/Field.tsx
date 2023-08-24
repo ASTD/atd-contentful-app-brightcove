@@ -72,11 +72,11 @@ const Field = ({ sdk }: FieldProps) => {
             Remove
           </Button>
         )}
-        <p>
-          For video content pages please choose the video first and all relevant
-          cms fields will auto populate
-        </p>
       </Flex>
+      <p style={{ fontSize: "10px" }}>
+        For video content pages please choose the video first and all relevant
+        cms fields will auto populate
+      </p>
     </Flex>
   );
 };
