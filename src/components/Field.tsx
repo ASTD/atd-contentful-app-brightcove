@@ -73,7 +73,7 @@ const Field = ({ sdk }: FieldProps) => {
           </Button>
         )}
       </Flex>
-      <p style={{ fontSize: "12px" }}>
+      <p style={{ fontSize: "12px", fontFamily: "sans-serif" }}>
         For video content pages please choose the video first and all relevant
         cms fields will auto populate
       </p>
