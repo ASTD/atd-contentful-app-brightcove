@@ -75,7 +75,7 @@ const Field = ({ sdk }: FieldProps) => {
       </Flex>
       <p
         style={{
-          fontSize: "13px",
+          fontSize: "14px",
           fontFamily: "sans-serif",
           color: "rgb(65, 77, 99)",
         }}
