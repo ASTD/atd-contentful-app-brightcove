@@ -80,7 +80,7 @@ const Field = ({ sdk }: FieldProps) => {
           color: "rgb(65, 77, 99)",
         }}
       >
-        For video content pages please choose the video first and all relevant
+        For video content pages please choose the video first and relevant
         cms fields will auto populate
       </p>
     </Flex>
