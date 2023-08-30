@@ -41,15 +41,6 @@ export const autofill = (video: any, version: any, sdk: any) => {
               "en-US":
                 `video/${video.name.replace(/\s+/g, "-").toLowerCase()}` || "",
             },
-            contentType: {
-              "en-US": {
-                sys: {
-                  id: "4mK4PEH0iLYPGhfmisfHgN",
-                  type: "Link",
-                  linkType: "Entry",
-                },
-              },
-            },
             body: {
               "en-US": {
                 content: [
